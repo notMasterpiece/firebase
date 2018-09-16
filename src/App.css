@@ -1,0 +1,31 @@
+.game-box {
+  border: 0;
+  border-collapse: collapse;
+}
+
+
+.game-td {
+  border: 1px solid orangered;
+}
+
+
+.game-td button {
+  background-color: transparent;
+  border: 0;
+  padding: 20px;
+}
+
+
+.flex-middle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.fa-pencil-alt {
+  cursor: pointer;
+}
+
+.m-r-10 {
+  margin-right: 10px;
+}
