@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
@@ -15,13 +15,22 @@ class AppNavBar extends Component {
         }
     }
 
-    componentWillUpdate() {
+    componentWillReceiveProps() {
         const {auth} = this.props;
-        // auth.uid ? this.setState({isAuth:true}) : this.setState({isAuth:false});
+        if (auth.uid) {
+            this.setState({ isAuth: true})
+        }
     }
+
+    logout = () => {
+        const {firebase} = this.props;
+        firebase.logout();
+    };
+
 
     render() {
 
+        const { isAuth } = this.state;
 
         return (
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -35,10 +44,23 @@ class AppNavBar extends Component {
                             <Link to={'/'} className="nav-link" href="#">Home <span className="sr-only">(current)</span></Link>
                         </li>
                     </ul>
-                    <form className="form-inline my-2 my-lg-0">
-                        <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-                            <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
+                    {
+                        isAuth &&
+                        <Fragment>
+                            <ul className="navbar-nav ml-auto">
+                                <li className="nav-item">
+                                    <Link to={'/'}
+                                          className="nav-link"
+                                          onClick={this.logout}
+                                    >Logout</Link>
+                                </li>
+                            </ul>
+                            <form className="form-inline my-2 my-lg-0">
+                                <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+                                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                        </Fragment>
+                    }
                 </div>
             </nav>
         );
@@ -46,7 +68,8 @@ class AppNavBar extends Component {
 }
 
 AppNavBar.propTypes = {
-  firebase: PropTypes.object.isRequired
+  firebase: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 
