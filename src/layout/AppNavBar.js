@@ -45,8 +45,13 @@ class AppNavBar extends Component {
                         </li>
                     </ul>
                     {
-                        isAuth &&
+                        isAuth ?
                         <Fragment>
+
+                            <form className="form-inline my-2 my-lg-0">
+                                <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+                                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            </form>
                             <ul className="navbar-nav ml-auto">
                                 <li className="nav-item">
                                     <Link to={'/'}
@@ -55,11 +60,14 @@ class AppNavBar extends Component {
                                     >Logout</Link>
                                 </li>
                             </ul>
-                            <form className="form-inline my-2 my-lg-0">
-                                <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-                                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                            </form>
                         </Fragment>
+                        :
+                        <ul className="navbar-nav ml-auto">
+                            <li className="nav-item">
+                                <Link to={'/login'} className="nav-link">Login</Link>
+                            </li>
+                        </ul>
+
                     }
                 </div>
             </nav>
