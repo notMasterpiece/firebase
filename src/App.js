@@ -11,6 +11,8 @@ import EditClient from './clients/EditClient';
 import ClientDetail from './clients/ClientDetail';
 import AppNavBar from './layout/AppNavBar';
 import Login from './auth/Login';
+import Register from './auth/Register';
+import Setting from './layout/Setting';
 
 import { UserIsAuthenticated,UserIsNotAuthenticated } from './helpers/auth';
 
@@ -24,11 +26,41 @@ class App extends Component {
               <AppNavBar />
               <div className="container">
                 <Switch>
-                  <Route exact path='/login' component={UserIsNotAuthenticated(Login)} />
-                  <Route exact path='/' component={UserIsAuthenticated(Dashboard)} />
-                  <Route exact path='/client/add' component={UserIsAuthenticated(AddClient)} />
-                  <Route exact path='/client/edit/:id' component={UserIsAuthenticated(EditClient)} />
-                  <Route exact path='/client/:id' component={UserIsAuthenticated(ClientDetail)} />
+                  <Route
+                      exact
+                      path='/login'
+                      component={UserIsNotAuthenticated(Login)}
+                  />
+                  <Route
+                      exact
+                      path='/singup'
+                      component={UserIsNotAuthenticated(Register)}
+                  />
+                  <Route
+                      exact
+                      path='/'
+                      component={UserIsAuthenticated(Dashboard)}
+                  />
+                  <Route
+                      exact
+                      path='/client/add'
+                      component={UserIsAuthenticated(AddClient)}
+                  />
+                  <Route
+                      exact
+                      path='/client/edit/:id'
+                      component={UserIsAuthenticated(EditClient)}
+                  />
+                  <Route
+                      exact
+                      path='/client/:id'
+                      component={UserIsAuthenticated(ClientDetail)}
+                  />
+                  <Route
+                      exact
+                      path='/setting'
+                      component={UserIsAuthenticated(Setting)}
+                  />
                 </Switch>
               </div>
             </div>

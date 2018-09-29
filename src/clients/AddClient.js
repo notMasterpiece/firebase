@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-    import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+
+import {compose} from 'redux';
+import {connect} from 'react-redux';
 
 import {firestoreConnect} from 'react-redux-firebase';
 
@@ -11,11 +14,11 @@ class AddClient extends Component {
         super(props);
 
         this.state = {
-            firstName: 'Vasul',
-            lastName: 'Pankiv',
+            firstName: '',
+            lastName: '',
             phone: '',
             email: '',
-            balance: ''
+            balance: 0
         };
     }
 
@@ -24,7 +27,6 @@ class AddClient extends Component {
         e.preventDefault();
 
         const newClient = this.state;
-
 
         // add to firebase
         const {firestore, history} = this.props;
@@ -40,6 +42,7 @@ class AddClient extends Component {
     render() {
 
         const {firstName, lastName, phone, email, balance} = this.state;
+        const { disableBalanceOnAdd } = this.props.settings;
 
         return (
             <div className="row">
@@ -98,17 +101,21 @@ class AddClient extends Component {
                                     value={phone}
                                 />
                             </div>
-                            <div className="form-group">
-                                <label htmlFor={balance}>balance</label>
-                                <input
-                                    type="text"
-                                    className='form-control'
-                                    name='balance'
-                                    required
-                                    onChange={this.onChange}
-                                    value={balance}
-                                />
-                            </div>
+                            {
+                                !disableBalanceOnAdd &&
+                                <div className="form-group">
+                                    <label htmlFor={balance}>balance</label>
+                                    <input
+                                        type="text"
+                                        className='form-control'
+                                        name='balance'
+                                        required
+                                        onChange={this.onChange}
+                                        value={balance}
+                                    />
+                                </div>
+                            }
+
                             <div className="form-group">
                                 <button type='submit' className='btn'>Send</button>
                             </div>
@@ -124,4 +131,9 @@ AddClient.propTypes = {
     firestore: PropTypes.object.isRequired
 };
 
-export default firestoreConnect()(AddClient);
+export default compose(
+    firestoreConnect(),
+    connect( state => ({
+        settings: state.settings
+    }))
+)(AddClient);

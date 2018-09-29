@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {firebaseConnect} from 'react-redux-firebase';
 
-class Login extends Component {
+class Register extends Component {
     state = {
         email: '',
         password: '',
@@ -17,15 +17,14 @@ class Login extends Component {
         const {firebase} = this.props;
         const {email, password} = this.state;
 
-        firebase.login({ email, password })
-            .then(() => {})
+        // Register with firbase
+        firebase.createUser({email, password})
             .catch(error => this.setState({error: error.message}))
     };
 
     render() {
 
         const {email, password, error} = this.state;
-
 
         return (
             <div className="row">
@@ -37,7 +36,7 @@ class Login extends Component {
                                 <div className="alert alert-danger" role="alert">{error}</div>
                             }
                             <h1 className='text-center pb-3 pt-3'>
-                                <i className="fa fa-lock" /> login
+                                Sing Up
                             </h1>
                             <form className="form-group" onSubmit={this.onSubmit}>
                                 <div className="form-group">
@@ -68,7 +67,7 @@ class Login extends Component {
                                         />
                                     </label>
                                 </div>
-                                <input type="submit" value="Submit" className={'btn btn-primary btn-block'}/>
+                                <input type="submit" value="Register" className={'btn btn-primary btn-block'}/>
                             </form>
                         </div>
                     </div>
@@ -78,8 +77,8 @@ class Login extends Component {
     }
 }
 
-Login.propTypes = {
+Register.propTypes = {
     firebase: PropTypes.object.isRequired
 };
 
-export default firebaseConnect()(Login);
+export default firebaseConnect()(Register);

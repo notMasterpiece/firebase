@@ -75,6 +75,8 @@ class ClientDetail extends Component {
 
         const { client } = this.props;
         const { showBalanceUpdateForm, balance, balanceError } = this.state;
+        const { disableBalanceOnEdit } = this.props.settings;
+
 
         if(client) {
             return (
@@ -110,48 +112,52 @@ class ClientDetail extends Component {
                                         <span className="text-secondary">{` ${client.id}`}</span>
                                     </h4>
                                 </div>
-                                <div className="col-sm-4">
-                                    <h3 className='float-right'>
-                                        Balance: $
-                                        <span className={`${client.balance > 0 ? 'text-success' : 'text-danger'}`}>
+                                {
+                                    !disableBalanceOnEdit &&
+                                    <div className="col-sm-4">
+                                        <h3 className='float-right'>
+                                            Balance: $
+                                            <span className={`${client.balance > 0 ? 'text-success' : 'text-danger'}`}>
                                             {' '}{parseFloat(client.balance).toFixed(2)}
                                         </span>
-                                        {' '}
-                                        {
-                                            showBalanceUpdateForm ?
-                                                <i className="fa fa-pen-alt" onClick={() => this.setState({showBalanceUpdateForm: !this.state.showBalanceUpdateForm})} />
-                                                    :
-                                                <i className="fa fa-pencil-alt" onClick={() => this.setState({showBalanceUpdateForm: !this.state.showBalanceUpdateForm})} />
-                                        }
-
-                                    </h3>
-                                    {
-                                        showBalanceUpdateForm &&
-                                        <form onSubmit={this.balanceSubmit}>
-                                            <div className="input-group">
-                                                <input
-                                                    name='balance'
-                                                    value={balance}
-                                                    type="text"
-                                                    onChange={this.changeUpdateForm}
-                                                    placeholder='Add new balance...'
-                                                    ref={el => this.balanseInput = el}
-                                                    className='form-control'/>
-                                                <button
-                                                    type='submit'
-                                                    className='btn btn-success'
-                                                >
-                                                    Update
-                                                </button>
-                                            </div>
+                                            {' '}
                                             {
-                                                balanceError &&
-                                                <p className="text-danger">Write only numbers</p>
+                                                showBalanceUpdateForm ?
+                                                    <i className="fa fa-pen-alt" onClick={() => this.setState({showBalanceUpdateForm: !this.state.showBalanceUpdateForm})} />
+                                                    :
+                                                    <i className="fa fa-pencil-alt" onClick={() => this.setState({showBalanceUpdateForm: !this.state.showBalanceUpdateForm})} />
                                             }
 
-                                        </form>
-                                    }
-                                </div>
+                                        </h3>
+                                        {
+                                            showBalanceUpdateForm &&
+                                            <form onSubmit={this.balanceSubmit}>
+                                                <div className="input-group">
+                                                    <input
+                                                        name='balance'
+                                                        value={balance}
+                                                        type="text"
+                                                        onChange={this.changeUpdateForm}
+                                                        placeholder='Add new balance...'
+                                                        ref={el => this.balanseInput = el}
+                                                        className='form-control'/>
+                                                    <button
+                                                        type='submit'
+                                                        className='btn btn-success'
+                                                    >
+                                                        Update
+                                                    </button>
+                                                </div>
+                                                {
+                                                    balanceError &&
+                                                    <p className="text-danger">Write only numbers</p>
+                                                }
+
+                                            </form>
+                                        }
+                                    </div>
+                                }
+
                             </div>
                         </div>
                     </div>
@@ -171,7 +177,8 @@ class ClientDetail extends Component {
 }
 
 ClientDetail.propTypes = {
-    client: PropTypes.object
+    client: PropTypes.object,
+    settings: PropTypes.object
 };
 
 export default compose(
@@ -180,5 +187,8 @@ export default compose(
     ]),
     connect(({firestore: {ordered}}, props) => ({
         client: ordered.client && ordered.client[0]
+    })),
+    connect( state => ({
+        settings: state.settings
     }))
 )(ClientDetail);
